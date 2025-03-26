@@ -1,0 +1,6 @@
+Flask
+opencv-python
+pandas
+openpyxl
+werkzeug
+gunicorn
