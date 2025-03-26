@@ -1,0 +1,92 @@
+<!-- <!DOCTYPE html>
+<html>
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsQR/1.3.1/jsQR.js"></script>
+</head>
+<body>
+    <h2>QR Code Scanner</h2>
+    <video id="video" width="300" height="200"></video>
+    <button onclick="startScanner()">Scan QR</button>
+
+    <script>
+        async function startScanner() {
+            const video = document.getElementById('video');
+            const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+            video.srcObject = stream;
+            video.play();
+
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+
+            function scan() {
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                const code = jsQR(imageData.data, imageData.width, imageData.height);
+                if (code) {
+                    fetch('/scan', { method: 'POST', body: new URLSearchParams({ qr_data: code.data }) });
+                    alert("QR Code Scanned: " + code.data);
+                    video.srcObject.getTracks().forEach(track => track.stop());
+                } else {
+                    requestAnimationFrame(scan);
+                }
+            }
+
+            scan();
+        }
+    </script>
+</body>
+</html> -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Scanner</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsQR/1.3.1/jsQR.js"></script>
+</head>
+<body>
+    <h2>QR Code Scanner</h2>
+
+    <!-- Camera Scan -->
+    <button onclick="startScanner()">Scan QR Code from Camera</button>
+    <video id="video" width="300" height="200"></video>
+
+    <br><br>
+
+    <!-- Image Upload -->
+    <form action="/" method="POST" enctype="multipart/form-data">
+        <label for="file">Upload Image:</label>
+        <input type="file" name="file" id="file" accept="image/*">
+        <button type="submit">Upload Image</button>
+    </form>
+
+    <script>
+        // Camera QR Scanning
+        async function startScanner() {
+            const video = document.getElementById('video');
+            const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+            video.srcObject = stream;
+            video.play();
+
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+
+            function scan() {
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                const code = jsQR(imageData.data, imageData.width, imageData.height);
+                if (code) {
+                    alert("QR Code Scanned: " + code.data);
+                    video.srcObject.getTracks().forEach(track => track.stop());
+                } else {
+                    requestAnimationFrame(scan);
+                }
+            }
+
+            scan();
+        }
+    </script>
+</body>
+</html>
